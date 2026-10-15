@@ -1,0 +1,79 @@
+---
+import '@/styles/global.css';
+import Navbar from '@/components/layout/Navbar.astro';
+import Footer from '@/components/layout/Footer.astro';
+import { siteContent } from '@/data/site';
+import { canonicalUrl } from '@/utils/seo';
+import { statSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+const { title, description, noindex = false } = Astro.props;
+const canonical = noindex ? undefined : canonicalUrl(Astro.url.pathname, Astro.site);
+const social = siteContent.socialImage;
+let socialUrl: string | undefined;
+if (Astro.site && social && social.src.startsWith('/images/') && !social.src.includes('..') && !/[\\?#]/.test(social.src) && social.width > 0 && social.height > 0) {
+  try {
+    const file = statSync(resolve('public', social.src.slice(1)));
+    if (file.isFile() && file.size > 0) socialUrl = new URL(social.src, Astro.site).href;
+  } catch { /* Omit unavailable preview images. */ }
+}
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {Astro.site && <link rel="sitemap" href="/sitemap-index.xml" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={siteContent.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="twitter:card" content={socialUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialUrl && social && <>
+      <meta property="og:image" content={socialUrl} />
+      <meta property="og:image:alt" content={social.alt} />
+      <meta property="og:image:width" content={String(social.width)} />
+      <meta property="og:image:height" content={String(social.height)} />
+      <meta name="twitter:image" content={socialUrl} />
+      <meta name="twitter:image:alt" content={social.alt} />
+    </>}
+    <script is:inline>
+      (() => {
+        let theme;
+        try { theme = localStorage.getItem('portfolio-theme'); } catch {}
+        document.documentElement.dataset.theme = theme === 'light' || theme === 'dark'
+          ? theme : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Navbar />
+    <main id="main-content"><slot /></main>
+    <Footer />
+  </body>
+</html>
+<script>
+  const skipLink = document.querySelector<HTMLAnchorElement>('.skip-link');
+  const main = document.querySelector<HTMLElement>('#main-content');
+  skipLink?.addEventListener('click', () => {
+    if (!main) return;
+    main.tabIndex = -1;
+    main.focus({ preventScroll: true });
+    main.removeAttribute('tabindex');
+  });
+</script>

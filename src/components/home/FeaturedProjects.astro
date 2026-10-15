@@ -1,0 +1,21 @@
+---
+import type { Project } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Button from '@/components/common/Button.astro';
+import Icon from '@/components/common/Icon.astro';
+import ProjectGrid from '@/components/projects/ProjectGrid.astro';
+
+interface Props { projects: Project[] }
+const { projects } = Astro.props;
+const featured = projects.filter((project) => project.featured);
+---
+<section id="projects" class="featured-projects section-space" aria-labelledby="featured-projects-title">
+  <Container>
+    <div class="projects-section-heading">
+      <SectionHeading id="featured-projects-title" eyebrow="04 / SELECTED WORK" title="Featured Projects" description="Backend contributions, system interfaces, and the work behind them." />
+      <Button href="/projects/" variant="secondary">All Projects <Icon name="arrow" /></Button>
+    </div>
+    <ProjectGrid projects={featured} emptyMessage="Featured projects will be added here." />
+  </Container>
+</section>

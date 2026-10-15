@@ -1,0 +1,65 @@
+---
+import Container from '@/components/common/Container.astro';
+import Icon from '@/components/common/Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { navigation } from '@/data/navigation';
+import { profile } from '@/data/profile';
+---
+<header class="site-header">
+  <Container class="header-inner">
+    <a class="brand" href="/" aria-label={`${profile.name} — home`}>
+      <span class="brand-mark"><Icon name="code" /></span>
+      <span>{profile.name}<span class="brand-caption">Backend developer</span></span>
+    </a>
+    <div class="header-controls">
+      <ThemeToggle />
+      <button class="icon-button menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle hidden>
+        <span class="menu-open-icon"><Icon name="menu" /></span>
+        <span class="menu-close-icon"><Icon name="close" /></span>
+      </button>
+    </div>
+    <nav id="primary-navigation" class="primary-nav" aria-label="Main navigation">
+      {navigation.map(({ href, label }) => <a href={href} aria-current={!href.includes('#') && href.replace(/\/$/, '') === Astro.url.pathname.replace(/\/$/, '') ? 'page' : undefined}>{label}</a>)}
+    </nav>
+  </Container>
+</header>
+<script>
+  const menu = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.querySelector<HTMLElement>('#primary-navigation');
+  const desktop = window.matchMedia('(min-width: 64rem)');
+  if (menu && nav) {
+    const setOpen = (open: boolean) => {
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+      nav.hidden = !desktop.matches && !open;
+    };
+    const reset = () => {
+      const navFocused = nav.contains(document.activeElement);
+      menu.hidden = desktop.matches;
+      setOpen(false);
+      if (!desktop.matches && navFocused) menu.focus();
+    };
+    reset();
+    desktop.addEventListener('change', reset);
+    menu.addEventListener('click', () => setOpen(menu.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (event) => {
+      if (event.target instanceof Element && event.target.closest('a')) {
+        const link = event.target.closest('a');
+        setOpen(false);
+        if (!desktop.matches && link?.hash && link.pathname === window.location.pathname) {
+          const target = document.getElementById(link.hash.slice(1));
+          if (target) { target.setAttribute('tabindex', '-1'); target.focus({ preventScroll: true }); }
+        }
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { setOpen(false); menu.focus(); }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !menu.contains(event.target) && !nav.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener('focusin', (event) => {
+      if (event.target instanceof Node && !menu.contains(event.target) && !nav.contains(event.target)) setOpen(false);
+    });
+  }
+</script>

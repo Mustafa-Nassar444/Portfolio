@@ -1,0 +1,30 @@
+---
+import Icon from '@/components/common/Icon.astro';
+---
+<button type="button" class="icon-button theme-toggle" aria-label="Switch to dark theme" data-theme-toggle hidden>
+  <span class="theme-icon-light"><Icon name="moon" /></span>
+  <span class="theme-icon-dark"><Icon name="sun" /></span>
+</button>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+  const storedTheme = () => {
+    try { return localStorage.getItem('portfolio-theme'); } catch { return null; }
+  };
+  const applyTheme = (dark: boolean) => {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    toggle?.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} theme`);
+  };
+  if (toggle) {
+    applyTheme(document.documentElement.dataset.theme === 'dark');
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      const dark = document.documentElement.dataset.theme !== 'dark';
+      applyTheme(dark);
+      try { localStorage.setItem('portfolio-theme', dark ? 'dark' : 'light'); } catch { /* Theme still works without storage. */ }
+    });
+    systemTheme.addEventListener('change', ({ matches }) => {
+      if (!['light', 'dark'].includes(storedTheme() ?? '')) applyTheme(matches);
+    });
+  }
+</script>

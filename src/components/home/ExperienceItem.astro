@@ -1,0 +1,32 @@
+---
+import type { Experience } from '@/types/content';
+import Badge from '@/components/common/Badge.astro';
+import { employmentMonth } from '@/utils/employmentDates';
+
+interface Props { entry: Experience }
+const { entry } = Astro.props;
+const start = employmentMonth(entry.startDate);
+const end = employmentMonth(entry.endDate);
+const current = !!start && !entry.endDate && !entry.isPlaceholder;
+const responsibilities = entry.responsibilities.filter((item) => item.trim());
+---
+<li class="timeline-item">
+  <article class="experience-entry">
+    <div class="experience-meta">
+      {entry.isPlaceholder && <Badge tone="accent">Sample experience</Badge>}
+      <p class="experience-dates">
+        {start ? (
+          <><time datetime={start.dateTime}>{start.label}</time><span aria-hidden="true"> — </span>
+            {end ? <time datetime={end.dateTime}>{end.label}</time> : current ? <span>Present</span> : <span>End date to be added</span>}
+          </>
+        ) : <span>Employment dates to be added</span>}
+      </p>
+      {entry.location?.trim() && <p class="experience-location">{entry.location}</p>}
+    </div>
+    <div class="experience-content">
+      <h3>{entry.role}</h3>
+      <p class="experience-company">{entry.company}</p>
+      {responsibilities.length > 0 && <ul class="responsibility-list">{responsibilities.map((item) => <li>{item}</li>)}</ul>}
+    </div>
+  </article>
+</li>

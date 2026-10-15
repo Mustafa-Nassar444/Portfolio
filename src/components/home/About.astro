@@ -1,0 +1,21 @@
+---
+import type { Profile } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Badge from '@/components/common/Badge.astro';
+
+interface Props { profile: Profile }
+const { profile } = Astro.props;
+const paragraphs = profile.about.filter((paragraph) => paragraph.trim());
+---
+<section id="about" class="about section-space" aria-labelledby="about-title">
+  <Container class="about-layout">
+    <SectionHeading id="about-title" eyebrow="01 / INTRODUCTION" title="About Me" />
+    <div class="about-copy">
+      {profile.isPlaceholder && <Badge>Sample biography</Badge>}
+      {paragraphs.length
+        ? paragraphs.map((paragraph) => <p>{paragraph}</p>)
+        : <p class="about-empty">A professional introduction will be added here.</p>}
+    </div>
+  </Container>
+</section>

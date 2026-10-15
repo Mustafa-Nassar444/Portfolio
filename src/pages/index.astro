@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/home/Hero.astro';
+import About from '@/components/home/About.astro';
+import Skills from '@/components/home/Skills.astro';
+import Experience from '@/components/home/Experience.astro';
+import FeaturedProjects from '@/components/home/FeaturedProjects.astro';
+import Contact from '@/components/home/Contact.astro';
+import { projects } from '@/data/projects';
+import { skills } from '@/data/skills';
+import { experience } from '@/data/experience';
+import { profile } from '@/data/profile';
+import { publicDocumentUrl } from '@/utils/publicDocument';
+
+const cvUrl = publicDocumentUrl(profile.cvPath);
+---
+<BaseLayout title={`${profile.name} | ${profile.title}`} description={profile.summary}>
+  <Hero profile={profile} cvUrl={cvUrl} projectsUrl="/projects/" />
+  <About profile={profile} />
+  <Skills categories={skills} />
+  <Experience entries={experience} />
+  <FeaturedProjects projects={projects} />
+  <Contact profile={profile} />
+</BaseLayout>

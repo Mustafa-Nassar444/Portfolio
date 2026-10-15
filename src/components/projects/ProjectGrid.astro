@@ -1,0 +1,10 @@
+---
+import type { Project } from '@/types/content';
+import ProjectCard from './ProjectCard.astro';
+import { projectUrl } from '@/utils/projectRoutes';
+
+interface Props { projects: Project[]; emptyMessage?: string; headingLevel?: 'h2' | 'h3' }
+const { projects, headingLevel = 'h3', emptyMessage = 'Project case studies are being prepared.' } = Astro.props;
+---
+{projects.length ? <div class="projects-grid">{projects.map((project) => <ProjectCard project={project} headingLevel={headingLevel} detailsUrl={projectUrl(project.slug)} />)}</div>
+  : <p class="section-empty">{emptyMessage}</p>}

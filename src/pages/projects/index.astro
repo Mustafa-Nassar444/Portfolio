@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import ProjectGrid from '@/components/projects/ProjectGrid.astro';
+import { projects } from '@/data/projects';
+import { profile } from '@/data/profile';
+---
+<BaseLayout title={`Projects | ${profile.name}`} description="Company projects and backend contributions, including Laravel APIs, administrative dashboards, and database logic.">
+  <section class="section-space projects-page" aria-labelledby="projects-title">
+    <Container>
+      <SectionHeading id="projects-title" level="h1" eyebrow="PORTFOLIO / WORK" title="Projects" description="One system, multiple interfaces. Each project distinguishes my backend contribution from work owned by other developers." />
+      <ProjectGrid projects={projects} headingLevel="h2" />
+    </Container>
+  </section>
+</BaseLayout>

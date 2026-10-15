@@ -1,0 +1,39 @@
+---
+import type { Profile } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import Badge from '@/components/common/Badge.astro';
+import Button from '@/components/common/Button.astro';
+import Icon from '@/components/common/Icon.astro';
+
+interface Props { profile: Profile; cvUrl?: string; projectsUrl?: string }
+const { profile, cvUrl, projectsUrl } = Astro.props;
+const backendSummary = profile.backendSummary?.filter((item) => item.label.trim() && item.value.trim()) ?? [];
+---
+<section class="hero section-space" aria-labelledby="hero-title">
+  <Container>
+    <div class="hero-layout">
+      <div class="hero-copy">
+        {profile.isPlaceholder && <Badge tone="accent">Sample profile — replace with your details</Badge>}
+        <p class="eyebrow hero-introduction">Hello, I'm {profile.name}.</p>
+        <h1 id="hero-title">{profile.title}</h1>
+        {profile.summary.trim() && <p class="hero-summary">{profile.summary}</p>}
+        {profile.location?.trim() && <p class="hero-location">Based in {profile.location}</p>}
+        <div class="hero-actions">
+          {projectsUrl && <Button href={projectsUrl}>View Projects <Icon name="arrow" /></Button>}
+          {cvUrl && <Button href={cvUrl} variant="secondary" download>Download CV <Icon name="download" /></Button>}
+          <Button href="#about" variant={projectsUrl || cvUrl ? 'text' : 'primary'}>About Me <Icon name="arrow" /></Button>
+        </div>
+        {!projectsUrl && <p class="hero-project-note">Project case studies are being prepared.</p>}
+      </div>
+      {backendSummary.length > 0 && <aside class="hero-motif" aria-label="Backend development summary">
+        <div class="motif-top" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="motif-body">
+          <span class="motif-comment">// behind the interface</span>
+          <span class="motif-bracket" aria-hidden="true">&#123;</span>
+          <dl class="motif-summary">{backendSummary.map((item) => <div><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
+          <span class="motif-bracket" aria-hidden="true">&#125;</span>
+        </div>
+      </aside>}
+    </div>
+  </Container>
+</section>

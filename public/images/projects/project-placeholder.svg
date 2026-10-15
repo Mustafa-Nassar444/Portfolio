@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#17232c"/>
+  <g fill="none" stroke="#526675" stroke-width="2">
+    <rect x="70" y="90" width="280" height="200" rx="12"/>
+    <rect x="450" y="90" width="280" height="200" rx="12"/>
+    <path d="M70 124h280M450 124h280M130 124v166M210 290v50h380v-50M400 340v30"/>
+  </g>
+  <g fill="#30414e">
+    <rect x="152" y="150" width="172" height="16" rx="4"/>
+    <rect x="152" y="185" width="74" height="70" rx="4"/>
+    <rect x="243" y="185" width="81" height="70" rx="4"/>
+    <rect x="478" y="150" width="224" height="65" rx="4"/>
+    <rect x="478" y="235" width="140" height="12" rx="4"/>
+  </g>
+  <rect x="305" y="370" width="190" height="48" rx="8" fill="#1c3833" stroke="#83dbc2"/>
+  <g fill="#e9eff3" font-family="system-ui,sans-serif" text-anchor="middle" font-size="16">
+    <text x="210" y="70">Dashboard</text><text x="590" y="70">Website</text>
+    <text x="400" y="400" fill="#83dbc2">One backend</text>
+    <text x="400" y="465" font-size="12" fill="#a5b3be">ILLUSTRATIVE PLACEHOLDER · NOT A PROJECT SCREENSHOT</text>
+  </g>
+</svg>

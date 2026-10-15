@@ -1,0 +1,24 @@
+---
+import type { Profile } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Button from '@/components/common/Button.astro';
+import Icon from '@/components/common/Icon.astro';
+import { contact } from '@/data/contact';
+import { emailLink, professionalLinks } from '@/utils/contactLinks';
+
+interface Props { profile: Profile }
+const { profile } = Astro.props;
+const email = emailLink(profile.email);
+const links = professionalLinks(profile.links);
+---
+<section id="contact" class="contact section-space" aria-labelledby="contact-title">
+  <Container class="contact-layout">
+    <SectionHeading id="contact-title" eyebrow="05 / CONTACT" title={contact.title} description={email || links.length ? contact.description : undefined} />
+    <div class="contact-content">
+      {email && <div class="contact-email"><Button href={email.url}>{contact.emailLabel} <Icon name="arrow" /></Button><p>{email.address}</p></div>}
+      {links.length > 0 && <ul class="contact-links" aria-label="Professional profiles">{links.map(({ label, url }) => <li><Button href={url} variant="secondary">{label} <Icon name="arrow" /></Button></li>)}</ul>}
+      {!email && !links.length && <p class="contact-empty">{contact.emptyMessage}</p>}
+    </div>
+  </Container>
+</section>

@@ -1,0 +1,13 @@
+---
+import { Image } from 'astro:assets';
+import type { ProjectImage } from '@/types/content';
+import { projectImageSource } from '@/utils/projectImages';
+
+interface Props { image: ProjectImage }
+const { image } = Astro.props;
+const source = projectImageSource(image.src);
+const attributes = { alt: image.alt, width: image.width, height: image.height, loading: 'lazy' as const, decoding: 'async' as const };
+---
+{typeof source === 'string'
+  ? <Image src={source} {...attributes} />
+  : <Image src={source} {...attributes} widths={[400, 640, 960]} sizes="(min-width: 40rem) 50vw, 100vw" format="webp" />}

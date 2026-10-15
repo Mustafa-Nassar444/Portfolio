@@ -1,0 +1,63 @@
+---
+import type { Project } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Badge from '@/components/common/Badge.astro';
+import Button from '@/components/common/Button.astro';
+import Icon from '@/components/common/Icon.astro';
+import ProjectGallery from './ProjectGallery.astro';
+import { webUrl } from '@/utils/webUrl';
+
+interface Props { project: Project }
+const { project } = Astro.props;
+const liveUrl = webUrl(project.projectUrl);
+const repositoryUrl = webUrl(project.repositoryUrl);
+const technologies = project.technologies.filter((value) => value.trim());
+const personal = project.personalTechnologies.filter((value) => value.trim());
+const responsibilities = project.responsibilities.filter((value) => value.trim());
+const features = project.features.filter((value) => value.trim());
+const highlights = project.technicalHighlights?.filter((value) => value.trim()) ?? [];
+---
+<Container class="case-study">
+  <Button href="/projects/" variant="text"><Icon name="arrow" class="previous-arrow" /> Back to Projects</Button>
+  <header class="case-header">
+    <div class="badge-group"><Badge>{project.type}</Badge>{project.isPlaceholder && <Badge tone="accent">Sample case study — replace with real work</Badge>}</div>
+    <SectionHeading id="case-title" level="h1" title={project.title} description={project.description} />
+    {project.company?.trim() && <p class="case-company">{project.company}</p>}
+    {(liveUrl || repositoryUrl) && <div class="hero-actions">
+      {liveUrl && <Button href={liveUrl}>Visit Project <Icon name="arrow" /></Button>}
+      {repositoryUrl && <Button href={repositoryUrl} variant="secondary">Source Repository <Icon name="arrow" /></Button>}
+    </div>}
+  </header>
+  <section class="case-section" aria-labelledby="overview-title">
+    <SectionHeading id="overview-title" title="Project overview" />
+    <p class="case-copy">{project.overview.trim() || 'A project overview will be added here.'}</p>
+  </section>
+  <section class="case-section" aria-labelledby="technologies-title">
+    <SectionHeading id="technologies-title" title="Technologies & ownership" />
+    <div class="case-columns">
+      <div><h3>Overall project technologies</h3>{technologies.length ? <ul class="badge-group case-tags">{technologies.map((technology) => <li><Badge>{technology}</Badge></li>)}</ul> : <p class="case-copy">Project technologies will be added here.</p>}</div>
+      <div><h3>Technologies I personally used</h3>{personal.length ? <ul class="badge-group case-tags">{personal.map((technology) => <li><Badge tone="accent">{technology}</Badge></li>)}</ul> : <p class="case-copy">Personal technologies will be added here.</p>}</div>
+    </div>
+    {project.contributionNotes?.trim() && <p class="ownership-note">{project.contributionNotes}</p>}
+  </section>
+  <section class="case-section" aria-labelledby="role-title">
+    <SectionHeading id="role-title" title="My role & responsibilities" description={project.role} />
+    {responsibilities.length ? <ul class="responsibility-list">{responsibilities.map((item) => <li>{item}</li>)}</ul> : <p class="case-copy">Responsibilities will be added here.</p>}
+  </section>
+  <section class="case-section" aria-labelledby="features-title">
+    <SectionHeading id="features-title" title="Key features" />
+    {features.length ? <ul class="responsibility-list">{features.map((item) => <li>{item}</li>)}</ul> : <p class="case-copy">Feature details will be added here.</p>}
+  </section>
+  {highlights.length > 0 && <section class="case-section" aria-labelledby="highlights-title">
+    <SectionHeading id="highlights-title" title="Technical highlights" />
+    <ul class="responsibility-list">{highlights.map((item) => <li>{item}</li>)}</ul>
+  </section>}
+  {project.challenges.length > 0 && <section class="case-section" aria-labelledby="challenges-title">
+    <SectionHeading id="challenges-title" title="Technical challenges & solutions" />
+    {project.challenges.length ? <div class="challenge-list">{project.challenges.map((item, index) => <article class="card"><h3>Challenge {index + 1}</h3><p class="case-copy">{item.challenge}</p><h4 class="solution-label">Solution</h4><p class="case-copy">{item.solution}</p></article>)}</div> : <p class="case-copy">Technical challenges and their solutions will be added here.</p>}
+  </section>
+  }
+  <ProjectGallery images={project.screenshots} />
+  <div class="case-return"><Button href="/projects/" variant="secondary">Back to Projects <Icon name="arrow" /></Button></div>
+</Container>

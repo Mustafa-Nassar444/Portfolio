@@ -1,0 +1,15 @@
+---
+import type { Project } from '@/types/content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectCaseStudy from '@/components/projects/ProjectCaseStudy.astro';
+import { projects } from '@/data/projects';
+import { profile } from '@/data/profile';
+import { projectStaticPaths } from '@/utils/projectRoutes';
+
+export function getStaticPaths() { return projectStaticPaths(projects); }
+interface Props { project: Project }
+const { project } = Astro.props;
+---
+<BaseLayout title={`${project.title} | ${profile.name}`} description={project.description}>
+  <ProjectCaseStudy project={project} />
+</BaseLayout>

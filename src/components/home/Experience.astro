@@ -1,0 +1,16 @@
+---
+import type { Experience } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import ExperienceItem from './ExperienceItem.astro';
+
+interface Props { entries: Experience[] }
+const { entries } = Astro.props;
+---
+<section id="experience" class="experience section-space" aria-labelledby="experience-title">
+  <Container>
+    <SectionHeading id="experience-title" eyebrow="03 / BACKGROUND" title="Work Experience" />
+    {entries.length ? <ol class="experience-timeline">{entries.map((entry) => <ExperienceItem entry={entry} />)}</ol>
+      : <p class="section-empty">Professional experience will be added here.</p>}
+  </Container>
+</section>

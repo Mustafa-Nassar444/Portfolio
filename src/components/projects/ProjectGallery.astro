@@ -1,0 +1,42 @@
+---
+import type { ProjectImage } from '@/types/content';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Icon from '@/components/common/Icon.astro';
+import ProjectPreview from './ProjectPreview.astro';
+import { projectImageUrl } from '@/utils/projectImages';
+
+interface Props { images: ProjectImage[] }
+const { images } = Astro.props;
+const available = images.filter((image) => image.src.trim() && image.width > 0 && image.height > 0);
+const interfaces = { dashboard: 'Administrative dashboard', website: 'Public website', other: 'Project view' };
+---
+<section class="case-section" aria-labelledby="gallery-title" data-gallery>
+  <SectionHeading id="gallery-title" title="Project images & interfaces" />
+  {available.length ? <>
+    <p class="case-copy gallery-intro">Select an image to view it in full.</p>
+    <div class="gallery-grid">
+      {available.map((image, index) => <figure>
+        <a href={projectImageUrl(image.src)} class="gallery-image-link" data-gallery-image data-alt={image.alt} data-caption={image.caption ?? interfaces[image.interface]} aria-label={`View image ${index + 1}: ${image.alt}`}>
+          <ProjectPreview image={image} />
+        </a>
+        <figcaption><span class="gallery-interface">{image.isIllustration ? 'Illustrative mockup — not a real screenshot' : interfaces[image.interface]}</span>{image.caption && <span>{image.caption}</span>}</figcaption>
+      </figure>)}
+    </div>
+    <dialog class="gallery-dialog" aria-labelledby="lightbox-title">
+      <div class="lightbox-header"><h3 id="lightbox-title">Project image</h3><button class="icon-button" type="button" data-lightbox-close aria-label="Close image viewer"><Icon name="close" /></button></div>
+      <p class="sr-only" aria-live="polite" data-lightbox-status></p>
+      <div class="lightbox-image-stage"><img data-lightbox-image alt="" hidden /></div>
+      <p class="lightbox-caption" data-lightbox-caption></p>
+      <div class="lightbox-controls">
+        <button class="icon-button" type="button" data-lightbox-prev aria-label="Previous image"><Icon name="arrow" class="previous-arrow" /></button>
+        <span data-lightbox-counter aria-live="polite"></span>
+        <button class="icon-button" type="button" data-lightbox-next aria-label="Next image"><Icon name="arrow" /></button>
+      </div>
+      <a class="lightbox-original" data-lightbox-original>Open original image</a>
+    </dialog>
+  </> : <p class="section-empty">Screenshots are not available for this project yet.</p>}
+</section>
+<script>
+  import { initializeGalleries } from '@/utils/gallery';
+  initializeGalleries();
+</script>

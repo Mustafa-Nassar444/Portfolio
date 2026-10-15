@@ -1,0 +1,31 @@
+---
+import type { SkillCategory } from '@/types/content';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Card from '@/components/common/Card.astro';
+import Badge from '@/components/common/Badge.astro';
+
+interface Props { categories: SkillCategory[] }
+const { categories } = Astro.props;
+const populated = categories.map((category) => ({ ...category, skills: category.skills.filter((skill) => skill.trim()) })).filter((category) => category.skills.length);
+---
+<section id="skills" class="skills section-space" aria-labelledby="skills-title">
+  <Container>
+    <SectionHeading id="skills-title" eyebrow="02 / TOOLKIT" title="Technical Skills" />
+    {populated.length ? (
+      <div class="skills-grid">
+        {populated.map((category) => (
+          <Card class="skill-card">
+            <div class="skill-card-heading">
+              <h3>{category.title}</h3>
+              {category.isPlaceholder && <Badge tone="accent">Sample skills</Badge>}
+            </div>
+            <ul class="skill-list" aria-label={category.title}>
+              {category.skills.map((skill) => <li><Badge>{skill}</Badge></li>)}
+            </ul>
+          </Card>
+        ))}
+      </div>
+    ) : <p class="section-empty">Technical skills will be added here.</p>}
+  </Container>
+</section>

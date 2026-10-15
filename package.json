@@ -1,0 +1,31 @@
+{
+  "name": "backend-developer-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "test": "node --test tests/publicDocument.test.ts tests/employmentDates.test.ts tests/projectRoutes.test.ts tests/gallery.test.ts tests/contactLinks.test.ts tests/seo.test.ts",
+    "verify:build": "node scripts/verify-build.mjs",
+    "build": "astro check && astro build",
+    "build:vercel": "npm test && npm run build && npm run verify:build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "engines": {
+    "node": ">=22.19.0 <23",
+    "npm": ">=9.6.5"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.3.8",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@types/node": "22.20.5",
+    "typescript": "6.0.3"
+  }
+}

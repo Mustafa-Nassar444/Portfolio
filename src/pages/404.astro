@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/common/Container.astro';
+import SectionHeading from '@/components/common/SectionHeading.astro';
+import Button from '@/components/common/Button.astro';
+---
+<BaseLayout title="Page not found | Portfolio" description="The requested portfolio page could not be found." noindex>
+  <Container class="section-space">
+    <SectionHeading id="not-found-title" level="h1" eyebrow="404 / NOT FOUND" title="Page not found" description="This page may have moved, or the address may be incorrect." />
+    <div class="hero-actions"><Button href="/projects/">Browse Projects</Button><Button href="/" variant="secondary">Return Home</Button></div>
+  </Container>
+</BaseLayout>

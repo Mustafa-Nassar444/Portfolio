@@ -1,0 +1,19 @@
+---
+import Container from '@/components/common/Container.astro';
+import { profile } from '@/data/profile';
+import { navigation } from '@/data/navigation';
+import { professionalLinks } from '@/utils/contactLinks';
+const links = professionalLinks(profile.links);
+---
+<footer class="site-footer">
+  <Container>
+    <div class="footer-main">
+      <div><a class="footer-name" href="/">{profile.name}</a><p>{profile.title}</p></div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        {navigation.map(({ href, label }) => <a href={href}>{label}</a>)}
+        {links.map(({ url, label }) => <a href={url}>{label}</a>)}
+      </nav>
+    </div>
+    <div class="footer-bottom"><small>&copy; {new Date().getFullYear()} {profile.name}</small><a href="#main-content">Back to top <span aria-hidden="true">↑</span></a></div>
+  </Container>
+</footer>

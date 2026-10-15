@@ -1,0 +1,34 @@
+---
+import type { Project } from '@/types/content';
+import Badge from '@/components/common/Badge.astro';
+import Button from '@/components/common/Button.astro';
+import Icon from '@/components/common/Icon.astro';
+import { webUrl } from '@/utils/webUrl';
+import ProjectPreview from './ProjectPreview.astro';
+
+interface Props { project: Project; detailsUrl?: string; headingLevel?: 'h2' | 'h3' }
+const { project, detailsUrl, headingLevel: Heading = 'h3' } = Astro.props;
+const personalTechnologies = project.personalTechnologies.filter((technology) => technology.trim());
+const thumbnail = project.thumbnail;
+const hasImage = thumbnail && thumbnail.width > 0 && thumbnail.height > 0 && thumbnail.src.trim();
+const liveUrl = webUrl(project.projectUrl);
+---
+<article class="project-card card">
+  <div class="project-thumbnail">
+    {hasImage && thumbnail ? <ProjectPreview image={thumbnail} />
+      : <div class="project-image-fallback"><Icon name="code" /><span>Preview unavailable</span></div>}
+  </div>
+  <div class="project-card-body">
+    <div class="badge-group"><Badge>{project.type}</Badge>{project.isPlaceholder && <Badge tone="accent">Sample project</Badge>}{thumbnail?.isIllustration && <Badge tone="accent">Illustrative mockup — not a real screenshot</Badge>}</div>
+    <Heading>{project.title}</Heading>
+    <p class="project-description">{project.description}</p>
+    <p class="project-role">{project.role}</p>
+    {personalTechnologies.length > 0 && <div class="project-technologies"><p class="project-label">Personal technologies</p><ul class="badge-group">{personalTechnologies.map((technology) => <li><Badge>{technology}</Badge></li>)}</ul></div>}
+    {project.contributionNotes?.trim() && <p class="project-contribution">{project.contributionNotes}</p>}
+    <div class="project-actions">
+      {detailsUrl ? <Button href={detailsUrl} variant="text" aria-label={`View details for ${project.title}`}>View Details <Icon name="arrow" /></Button>
+        : <p class="project-availability">Case study coming soon.</p>}
+      {liveUrl && <Button href={liveUrl} variant="secondary" aria-label={`Visit ${project.title}`}>Visit Project <Icon name="arrow" /></Button>}
+    </div>
+  </div>
+</article>
